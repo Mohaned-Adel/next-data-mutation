@@ -7,7 +7,7 @@ export default function FormSubmit() {
   return (
     <>
       {pending ? (
-        <p>Creating post...</p>
+        <span>Creating post...</span>
       ) : (
         <>
           <button type="reset">Reset</button>
