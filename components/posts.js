@@ -1,10 +1,12 @@
 "use client";
+
+import { useOptimistic } from "react";
+
 import { formatDate } from "@/lib/format";
 import LikeButton from "./like-icon";
 import { togglePostLikeStatus } from "@/actions/posts";
-import { useOptimistic } from "react";
 
-function Post({ post, updatePost = () => {} }) {
+function Post({ post, action }) {
   return (
     <article className="post">
       <div className="post-image">
@@ -23,7 +25,7 @@ function Post({ post, updatePost = () => {} }) {
           </div>
           <div>
             <form
-              action={updatePost.bind(null, post.id)}
+              action={action.bind(null, post.id)}
               className={post.isLiked ? "liked" : ""}
             >
               <LikeButton />
@@ -43,7 +45,10 @@ export default function Posts({ posts }) {
       const updatedPostIndex = prevPosts.findIndex(
         (post) => post.id === updatedPostId
       );
-      if (updatedPostIndex === -1) return prevPosts;
+
+      if (updatedPostIndex === -1) {
+        return prevPosts;
+      }
 
       const updatedPost = { ...prevPosts[updatedPostIndex] };
       updatedPost.likes = updatedPost.likes + (updatedPost.isLiked ? -1 : 1);
@@ -67,7 +72,7 @@ export default function Posts({ posts }) {
     <ul className="posts">
       {optimisticPosts.map((post) => (
         <li key={post.id}>
-          <Post post={post} updatePost={updatePost} />
+          <Post post={post} action={updatePost} />
         </li>
       ))}
     </ul>
